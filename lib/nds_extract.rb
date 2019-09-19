@@ -2,7 +2,6 @@ require 'directors_database'
 # Call the method directors_database to retrieve the NDS
 
 def directors_totals
-  # Write this out as a nested series of whiles
 end
 
 def worldwide_gross_for_directors(nds)
