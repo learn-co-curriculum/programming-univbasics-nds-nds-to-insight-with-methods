@@ -1,7 +1,7 @@
 require 'directors_database'
 # Call the method directors_database to retrieve the NDS
 
-def directors_totals
+def directors_totals(nds)
 end
 
 def worldwide_gross_for_directors(nds)
@@ -10,7 +10,7 @@ def worldwide_gross_for_directors(nds)
   # gross_for_director to do the "totalling" work.
 end
 
-def gross_for_director(nds, director_name)
+def gross_for_director(director_name)
   # Write a method that, given an NDS and a directors name returns the totals
   # of that directors movies based on summing an AoH where each Hash has a key
   # :worldwide_gross

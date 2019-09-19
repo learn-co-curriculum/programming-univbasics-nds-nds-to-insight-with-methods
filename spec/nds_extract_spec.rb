@@ -5,13 +5,14 @@ describe 'gross_for_director method' do
   it "correctly totals the worldwide earnings for a director" do
     first_director_name = directors_database.first.values.first
     first_director_hash = directors_database.find{ |x| x[:name] == first_director_name }
+
     expect(gross_for_director(first_director_hash)).to eq(1357566430)
   end
 end
 
 describe 'The directors_database method can be processed by the directors_totals method' do
   it 'which returns a Hash describing director to total' do
-    expect(directors_totals).to be_a(Hash)
+    expect(directors_totals([{ :name => "Test Director", :movies => []}])).to be_a(Hash)
   end
 
   describe "and correctly totals the directors' totals" do
@@ -30,39 +31,39 @@ describe 'The directors_database method can be processed by the directors_totals
     }
 
     it "correctly totals 'Stephen Spielberg'" do
-      expect(directors_totals['Stephen Spielberg']).to eq(expected['Stephen Spielberg'])
+      expect(directors_totals(directors_database)['Stephen Spielberg']).to eq(expected['Stephen Spielberg'])
     end
 
     it "correctly totals 'Russo Brothers'" do
-      expect(directors_totals['Russo Brothers']).to eq(expected['Russo Brothers'])
+      expect(directors_totals(directors_database)['Russo Brothers']).to eq(expected['Russo Brothers'])
     end
 
     it "correctly totals 'James Cameron'" do
-      expect(directors_totals['James Cameron']).to eq(expected['James Cameron'])
+      expect(directors_totals(directors_database)['James Cameron']).to eq(expected['James Cameron'])
     end
 
     it "correctly totals 'Spike Lee'" do
-      expect(directors_totals['Spike Lee']).to eq(expected['Spike Lee'])
+      expect(directors_totals(directors_database)['Spike Lee']).to eq(expected['Spike Lee'])
     end
 
     it "correctly totals 'Wachowski Siblings'" do
-      expect(directors_totals['Wachowski Siblings']).to eq(expected['Wachowski Siblings'])
+      expect(directors_totals(directors_database)['Wachowski Siblings']).to eq(expected['Wachowski Siblings'])
     end
 
     it "correctly totals 'Robert Zemeckis'" do
-      expect(directors_totals['Robert Zemeckis']).to eq(expected['Robert Zemeckis'])
+      expect(directors_totals(directors_database)['Robert Zemeckis']).to eq(expected['Robert Zemeckis'])
     end
 
     it "correctly totals 'Quentin Tarantino'" do
-      expect(directors_totals['Quentin Tarantino']).to eq(expected['Quentin Tarantino'])
+      expect(directors_totals(directors_database)['Quentin Tarantino']).to eq(expected['Quentin Tarantino'])
     end
 
     it "correctly totals 'Martin Scorsese'" do
-      expect(directors_totals['Martin Scorsese']).to eq(expected['Martin Scorsese'])
+      expect(directors_totals(directors_database)['Martin Scorsese']).to eq(expected['Martin Scorsese'])
     end
 
     it "correctly totals 'Francis Ford Coppola'" do
-      expect(directors_totals['Francis Ford Coppola']).to eq(expected['Francis Ford Coppola'])
+      expect(directors_totals(directors_database)['Francis Ford Coppola']).to eq(expected['Francis Ford Coppola'])
     end
   end
 end

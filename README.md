@@ -81,16 +81,16 @@ p grand_piece_total #=> 1192
 
 Zoom in to where we introduced our comments. Generally, comments that explain
 ***why*** something is done like `# Added because of Bug #123123, don't remove the
-following reset!` or that document some really tricky bit of code like `#
-Optimization seen in blog post http://example.com/101-ways-to-speed-up-an-application#32`
+following reset!` or that document some really tricky bit of code like
+`# Optimization seen in blog post http://example.com/101-ways-to-speed-up-an-application#32`
 are great additions to code.
 
-***However***, this comment is a little different, it's here because our code
+***However***, _this_ comment is a little different, it's here because our code
 is really hard to understand. As programmer Brian Kernighan once said: "Don't
 comment bad code ‐ rewrite it." One of the best ways to "rewrite" complex code
 is to put its work or "thinking" inside of a _method_ with a meaningful name.
 
-Let's zoom-in on this commented bit of code:
+Let's nasty code we tried to "explain away" with a comment:
 
 ```ruby
 # Invalid code, can't be pasted into IRB!
@@ -109,19 +109,20 @@ Inside this code two key things happen:
 1. We total up the pieces in each of the snacks on a vending machine "spinner"
 2. We "accumulate" that number to a grand total.
 
-Wouldn't the code be simpler if we had a method that could
-`total_snack_pieces_on_spinner`? For each spinner in the row we'd hand the
-spinner to our method and the method would return the total number of snacks on
-the spinner?
+This could would be simpler if we had a method that could
+`total_snack_pieces_on_spinner`. For each spinner in the row, we'd hand the
+spinner to our method, and the method would return the total number of snacks
+on the spinner.  Then, we'd accumulate those returned spinner totals to a grand
+total.
 
-Then, we'd accumulate those returned spinner totals to a grand total.
+Beginners are often staggered by the idea we just presented: that we can just
+code into existence things we wish we had.  But ...  Yes! We can! And we
+should! It's strange, many beginners understand _how_ to write methods but have
+an "Ah-hah!" moment when they realize that _we_ don't serve the methods, the
+methods serve _us_.
 
-Beginners are often staggered by the idea we just presented, that we can just
-add code the thing into existence that would make our lives better. But ...
-Yes! We can! And we should!
-
-We'll call this method `total_snack_pieces_on_spinner`. It will take as
-arguments
+Let's create the method `total_snack_pieces_on_spinner`. It will take as
+arguments:
 
 * the NDS
 * the row coordinate
@@ -129,9 +130,8 @@ arguments
 
 and return the total number of snack pieces on that spinner.
 
-The implementation of `total_snack_pieces_on_spinner` will largely be a
-cut-and-paste of the complex code we're pointed out earlier that we had to
-comment.
+The implementation of `total_snack_pieces_on_spinner` will largely be the
+pre-existing code, but will make use of passed-in arguments.
 
 ```ruby
 vm = [[[{:name=>"Vanilla Cookies", :pieces=>3}, {:name=>"Pistachio Cookies", :pieces=>3}, {:name=>"Chocolate Cookies", :pieces=>3}, {:name=>"Chocolate Chip Cookies", :pieces=>3}], [{:name=>"Tooth-Melters", :pieces=>12}, {:name=>"Tooth-Destroyers", :pieces=>12}, {:name=>"Enamel Eaters", :pieces=>12}, {:name=>"Dentist's Nighmare", :pieces=>20}], [{:name=>"Gummy Sour Apple", :pieces=>3}, {:name=>"Gummy Apple", :pieces=>5}, {:name=>"Gummy Moldy Apple", :pieces=>1}]], [[{:name=>"Grape Drink", :pieces=>1}, {:name=>"Orange Drink", :pieces=>1}, {:name=>"Pineapple Drink", :pieces=>1}], [{:name=>"Mints", :pieces=>13}, {:name=>"Curiously Toxic Mints", :pieces=>1000}, {:name=>"US Mints", :pieces=>99}]]]
@@ -147,6 +147,8 @@ def total_snack_pieces_on_spinner(nds, row_index, column_index)
   coordinate_total
 end
 
+# Main code
+
 grand_piece_total = 0
 row_index = 0
 while row_index < vm.length do
@@ -158,14 +160,17 @@ while row_index < vm.length do
   row_index += 1
 end
 
+# End Main code
+
 p grand_piece_total #=> 1192
 ```
 
-Take a look at that code. See how it's easier to read? We're iterating through
-grid coordinates and, for each coordinate pair, we're asking some other bit of
-thinking called `total_pieces_on_first_spinner` to tell us how many pieces of
-snack are present in the spinner. We don't have to think about the
-implementation of `total_pieces_on_first_spinner`.
+Take a look at that code between the "`Main code...End Main code`" markers.
+See how it's easier to read? Without the extra noise, it's easier to see that
+we're iterating through grid coordinates and, for each coordinate pair, we're
+asking some other bit of thinking called `total_pieces_on_first_spinner` to
+tell us how many pieces of snack are present in the spinner. This liberates our
+brains from having to think about the low-level `[]` details inside the method. 
 
 This is the heart of programming: building small little methods that make it
 easy for humans to reason about how we asked a computer to help us figure
@@ -177,28 +182,22 @@ Kernighan:
 ## Create a "First-Order" Method
 
 We call `total_pieces_on_first_spinner` a "First-Order Method." It wraps the
-basic Ruby `Array` and REPETITION code in a meaningful name. It's much easier
-for our human brains to say "iterate through the coordinates and, for each one,
-sum up the pieces found in each snack" than to think about all the `while` and
-`do` and `end` ....noise. While computers require us to talk to them using Ruby
-primitives, we can teach _them_ how to think in a way that works for ***us***
-and other code readers.
+basic Ruby code in a meaningful name. 
 
 ## Ensure "First-Order Methods" Use Arguments to Create Flexibility
 
 It's worth taking a moment to consider the arguments to
-`total_snack_pieces_on_spinner`. We **didn't** write
-`total_pieces_on_first_spinner`, and `total_pieces_on_second_spinner`, and
-`total_pieces_on_third_spinner`, ...  and so on. We saw that the dimensions of
-our vending machine NDS might change (more rows, `1,000`, `1,000,000`,
-`1,000,000,000` even!). As long as we can simply increment integers
-(`row_index` and `column_index`), our code ***works***.
+`total_snack_pieces_on_spinner`. We chose arguments that allow flexibility
+(total_snack_pieces_on_spinner is better than `total_pieces_on_first_spinner`).
+Also, by passing the big NDS in the method call we're saying "Look, we don't
+want to know how you calculate this, but you're going to need these three
+facts."
 
 You might recall that the process of making methods that are flexible based on
 arguments is called _abstraction_. We should endeavor to make our methods
-appropriately _abstract_. We can make them too abstract and not abstract
-enough. How to decide if you're in the sweet spot? Sadly, that takes experience
-and flexibility. Again, let the "3 a.m. rule" be your guide.
+appropriately _abstract_. We _can_ make them too abstract and sometimes not
+abstract enough. How to decide if you're in the sweet spot? Sadly, that takes
+experience. Let the "3 a.m. rule" be your guide.
 
 ## Lab
 
