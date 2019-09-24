@@ -78,18 +78,19 @@ end
 p grand_total #=> 1192
 ```
 
-Zoom in to where we introduced our comments. Generally, comments that explain
-***why*** something is done like `# Added because of Bug #123123, don't remove the
-following reset!` or that document some really tricky bit of code like
-`# Optimization seen in blog post http://example.com/101-ways-to-speed-up-an-application#32`
-are great additions to code.
+Look where we introduced our comments. Generally, comments that explain
+***why*** something is done like `# Added because of Bug #123123, don't remove
+the following reset!` or that document some really tricky bit of code like `#
+Optimization seen in blog post
+http://example.com/101-ways-to-speed-up-an-application#32` are great additions
+to code.
 
 ***However***, _this_ comment is a little different, it's here because our code
 is really hard to understand. As programmer Brian Kernighan once said: "Don't
 comment bad code ‐ rewrite it." One of the best ways to "rewrite" complex code
 is to put its work or "thinking" inside of a _method_ with a meaningful name.
 
-Let's nasty code we tried to "explain away" with a comment:
+Let's examine the nasty code we tried to "explain away" with a comment:
 
 ```ruby
 # Invalid code, can't be pasted into IRB!
