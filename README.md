@@ -49,14 +49,14 @@ strong, understandable basis for fixing things, you've met the guideline.
 
 ## Wrap Uses of `[]` from Step 2 into new method
 
-At the end of the previous lesson, our solution to calculate the number of
-pieces of snacks in the vending machine looked like this:
+At the end of the previous lesson, our solution to calculate the aggregate
+value of snacks in the vending machine looked like this:
 
 ```ruby
-vm = [[[{:name=>"Vanilla Cookies", :price=>3}, {:name=>"Pistachio Cookies", :price=>3}, {:name=>"Chocolate Cookies", :price=>3}, {:name=>"Chocolate Chip Cookies", :price=>3}], [{:name=>"Tooth-Melters", :price=>12}, {:name=>"Tooth-Destroyers", :price=>12}, {:name=>"Enamel Eaters", :price=>12}, {:name=>"Dentist's Nighmare", :price=>20}], [{:name=>"Gummy Sour Apple", :price=>3}, {:name=>"Gummy Apple", :price=>5}, {:name=>"Gummy Moldy Apple", :price=>1}]], [[{:name=>"Grape Drink", :price=>1}, {:name=>"Orange Drink", :price=>1}, {:name=>"Pineapple Drink", :price=>1}], [{:name=>"Mints", :price=>13}, {:name=>"Curiously Toxic Mints", :price=>1000}, {:name=>"US Mints", :price=>99}]]]
+vm = [[[{:name=>"Vanilla Cookies", :price=>3}, {:name=>"Pistachio Cookies", :price=>3}, {:name=>"Chocolate Cookies", :price=>3}, {:name=>"Chocolate Chip Cookies", :price=>3}], [{:name=>"Tooth-Melters", :price=>12}, {:name=>"Tooth-Destroyers", :price=>12}, {:name=>"Enamel Eaters", :price=>12}, {:name=>"Dentist's Nightmare", :price=>20}], [{:name=>"Gummy Sour Apple", :price=>3}, {:name=>"Gummy Apple", :price=>5}, {:name=>"Gummy Moldy Apple", :price=>1}]], [[{:name=>"Grape Drink", :price=>1}, {:name=>"Orange Drink", :price=>1}, {:name=>"Pineapple Drink", :price=>1}], [{:name=>"Mints", :price=>13}, {:name=>"Curiously Toxic Mints", :price=>1000}, {:name=>"US Mints", :price=>99}]]]
 
 
-grand_piece_total = 0
+grand_total = 0
 row_index = 0
 while row_index < vm.length do
   column_index = 0
@@ -64,9 +64,10 @@ while row_index < vm.length do
     inner_len = vm[row_index][column_index].length
     inner_index = 0
     while inner_index < inner_len do
+      # Explanation!
       # vm[row][column][spinner]
-      # spinner is full of Hashes with keys :pieces and :name
-      grand_piece_total += vm[row_index][column_index][inner_index][:pieces]
+      # spinner is full of Hashes with keys :price and :name
+      grand_total += vm[row_index][column_index][inner_index][:price]
       inner_index += 1
     end
     column_index += 1
@@ -74,7 +75,7 @@ while row_index < vm.length do
   row_index += 1
 end
 
-p grand_piece_total #=> 1192
+p grand_total #=> 1192
 ```
 
 Zoom in to where we introduced our comments. Generally, comments that explain
@@ -95,8 +96,8 @@ Let's nasty code we tried to "explain away" with a comment:
     inner_index = 0
     while inner_index < inner_len do
     # vm[row][column][spinner]
-    # spinner is full of Hashes with keys :pieces and :name
-    grand_piece_total += vm[row_index][column_index][inner_index][:pieces]
+    # spinner is full of Hashes with keys :price and :name
+    grand_total += vm[row_index][column_index][inner_index][:price]
     inner_index += 1
     end
     column_index += 1
@@ -119,27 +120,27 @@ not yet had an "Ah-hah!" moment when they realize that _we_ don't serve the
 methods, the methods serve _us_. We hope some of you have been enlightened by
 reading that sentence!
 
-Let's create the method `total_snack_pieces_on_spinner`. It will take as
+Let's create the method `total_value_of_spinner`. It will take as
 arguments:
 
 * the NDS
 * the row coordinate
 * and the column coordinate
 
-and return the total number of snack pieces on that spinner.
+and return the total value of snacks on that spinner.
 
-The implementation of `total_snack_pieces_on_spinner` will largely be the
+The implementation of `total_value_of_spinner` will largely be the
 pre-existing code, but will make use of passed-in arguments.
 
 ```ruby
-vm = [[[{:name=>"Vanilla Cookies", :price=>3}, {:name=>"Pistachio Cookies", :price=>3}, {:name=>"Chocolate Cookies", :price=>3}, {:name=>"Chocolate Chip Cookies", :price=>3}], [{:name=>"Tooth-Melters", :price=>12}, {:name=>"Tooth-Destroyers", :price=>12}, {:name=>"Enamel Eaters", :price=>12}, {:name=>"Dentist's Nighmare", :price=>20}], [{:name=>"Gummy Sour Apple", :price=>3}, {:name=>"Gummy Apple", :price=>5}, {:name=>"Gummy Moldy Apple", :price=>1}]], [[{:name=>"Grape Drink", :price=>1}, {:name=>"Orange Drink", :price=>1}, {:name=>"Pineapple Drink", :price=>1}], [{:name=>"Mints", :price=>13}, {:name=>"Curiously Toxic Mints", :price=>1000}, {:name=>"US Mints", :price=>99}]]]
+vm = [[[{:name=>"Vanilla Cookies", :price=>3}, {:name=>"Pistachio Cookies", :price=>3}, {:name=>"Chocolate Cookies", :price=>3}, {:name=>"Chocolate Chip Cookies", :price=>3}], [{:name=>"Tooth-Melters", :price=>12}, {:name=>"Tooth-Destroyers", :price=>12}, {:name=>"Enamel Eaters", :price=>12}, {:name=>"Dentist's Nightmare", :price=>20}], [{:name=>"Gummy Sour Apple", :price=>3}, {:name=>"Gummy Apple", :price=>5}, {:name=>"Gummy Moldy Apple", :price=>1}]], [[{:name=>"Grape Drink", :price=>1}, {:name=>"Orange Drink", :price=>1}, {:name=>"Pineapple Drink", :price=>1}], [{:name=>"Mints", :price=>13}, {:name=>"Curiously Toxic Mints", :price=>1000}, {:name=>"US Mints", :price=>99}]]]
 
-def total_snack_pieces_on_spinner(nds, row_index, column_index)
+def total_value_of_spinner(nds, row_index, column_index)
   coordinate_total = 0
   inner_len = nds[row_index][column_index].length
   inner_index = 0
   while inner_index < inner_len do
-    coordinate_total += nds[row_index][column_index][inner_index][:pieces]
+    coordinate_total += nds[row_index][column_index][inner_index][:price]
     inner_index += 1
   end
   coordinate_total
@@ -147,12 +148,12 @@ end
 
 # Main code
 
-grand_piece_total = 0
+grand_total = 0
 row_index = 0
 while row_index < vm.length do
   column_index = 0
   while column_index < vm[row_index].length do
-    grand_piece_total += total_snack_pieces_on_spinner(vm, row_index, column_index)
+    grand_total += total_value_of_spinner(vm, row_index, column_index)
     column_index += 1
   end
   row_index += 1
@@ -160,7 +161,7 @@ end
 
 # End Main code
 
-p grand_piece_total #=> 1192
+p grand_total #=> 1192
 ```
 
 Take a look at that code between the "`Main code...End Main code`" markers.
