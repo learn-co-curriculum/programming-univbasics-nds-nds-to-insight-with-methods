@@ -9,8 +9,8 @@
 ## Introduction
 
 In the previous lab we used our knowledge of REPETITION and `Array` syntax to
-answer the question: "***How many pieces of snacks are in this vending
-machine?***"
+answer the question: "***What's the total value of all the snacks in this
+vending machine?***"
 
 But our code didn't take advantage of our ability to create _methods_ to help
 our human brains understand what the code was doing. While the previous
@@ -104,14 +104,13 @@ Let's nasty code we tried to "explain away" with a comment:
 
 Inside this code two key things happen:
 
-1. We total up the pieces in each of the snacks on a vending machine "spinner"
+1. We total up the price in each of the snacks on a vending machine "spinner"
 2. We "accumulate" that number to a grand total.
 
 This could would be simpler if we had a method that could
-`total_snack_pieces_on_spinner`. For each spinner in the row, we'd hand the
-spinner to our method, and the method would return the total number of snacks
-on the spinner.  Then, we'd accumulate those returned spinner totals to a grand
-total.
+`total_value_of_spinner`. For each spinner in the row, we'd hand the spinner to
+our method, and the method would return the total number of snacks on the
+spinner.  Then, we'd accumulate those returned spinner totals to a grand total.
 
 Beginners are often staggered by the idea we just presented: that we can just
 code into existence things we wish we had.  But ...  Yes! We can! And we
@@ -167,9 +166,9 @@ p grand_piece_total #=> 1192
 Take a look at that code between the "`Main code...End Main code`" markers.
 See how it's easier to read? Without the extra noise, it's easier to see that
 we're iterating through grid coordinates and, for each coordinate pair, we're
-asking some other bit of thinking called `total_pieces_on_first_spinner` to
-tell us how many pieces of snack are present in the spinner. This liberates our
-brains from having to think about the low-level `[]` details inside the method.
+asking some other bit of thinking called `total_value_of_spinner` to tell us
+the value of snacks in the spinner. This liberates our brains from having to
+think about the low-level `[]` details inside the method.
 
 This is the heart of programming: building small little methods that make it
 easy for humans to reason about how we asked a computer to help us figure
@@ -180,18 +179,20 @@ Kernighan:
 
 ## Create a "First-Order" Method
 
-We call `total_pieces_on_first_spinner` a "First-Order Method." It wraps the
-basic Ruby code in a meaningful name. "First-Order" means that instead of
-dealing with "atomic" issues, we're working at a higher level of abstraction. A
-"First-Order" method in real life is "make a sandwich." It's many of many,
-many, smaller, atomic operations, but instead of saying do all them, we just
-say "make a sandwich."
+We call `total_value_of_spinner` a "First-Order Method." It wraps the basic
+Ruby code in a meaningful name. "First-Order" means that instead of dealing
+with "atomic" Ruby syntax like `[]`, we're working at a higher level of
+abstraction a "first step" or "first order" away from the atomic syntax.
+
+A "First-Order" method in real life is "make a sandwich." It's many of many,
+many, smaller, atomic operations, but instead of thinking terms of _all_ of
+them, we talk about a "First-Order" activity, "make a sandwich."
 
 ## Ensure "First-Order Methods" Use Arguments to Create Flexibility
 
 It's worth taking a moment to consider the arguments to
-`total_snack_pieces_on_spinner`. We chose arguments that allow flexibility
-(`total_snack_pieces_on_spinner` is better than `total_pieces_on_first_spinner`).
+`total_value_of_spinner`. We chose arguments that allow flexibility
+(`total_value_of_spinner` is better than `total_value_of_first_spinner`).
 
 Also, by passing the big NDS in the method call we're saying "Look, we don't
 want to know how you calculate this, but you're going to need these three
